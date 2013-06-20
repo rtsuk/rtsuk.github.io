@@ -28,6 +28,9 @@ randomInt = (lower, upper) ->
 roll = (sides) ->
 	randomInt(1, sides)
 	
+getIntSelectValue = (inputName) ->
+	parseInt $("select[name='#{inputName}']").val(), 10
+
 getIntValue = (inputName) ->
 	parseInt $("input[name='#{inputName}']").val(), 10
 
@@ -74,6 +77,16 @@ calculate = () ->
 	hitSides = getIntValue "hitSides"
 	critSides = getIntValue "critSides"
 	shields = getIntValue "shieldSides"
+	range = getIntSelectValue "range"
+	switch range
+		when 1
+			attackDice += 1
+		when 3
+			defenseDice += 1
+		when 4
+			defenseDice += 2
+	
+	$("#details").text "#{attackDice} attack dice vs #{defenseDice} defense dice"
 	cancelCritsFirst = getBooleanValue "cancelCrits"
 	for armor in [1...20]
 		hitCount = 0
