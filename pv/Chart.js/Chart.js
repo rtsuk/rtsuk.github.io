@@ -152,13 +152,29 @@ window.Chart = function(context){
 	var height = context.canvas.height;
 
 
+    devicePixelRatio = window.devicePixelRatio || 1,
+    backingStoreRatio = context.webkitBackingStorePixelRatio ||
+                        context.mozBackingStorePixelRatio ||
+                        context.msBackingStorePixelRatio ||
+                        context.oBackingStorePixelRatio ||
+                        context.backingStorePixelRatio || 1,
+
+    ratio = devicePixelRatio / backingStoreRatio;
 	//High pixel density displays - multiply the size of the canvas height/width by the device pixel ratio, then scale.
-	if (window.devicePixelRatio) {
-		context.canvas.style.width = width + "px";
-		context.canvas.style.height = height + "px";
-		context.canvas.height = height * window.devicePixelRatio;
-		context.canvas.width = width * window.devicePixelRatio;
-		context.scale(window.devicePixelRatio, window.devicePixelRatio);
+	if (devicePixelRatio !== backingStoreRatio) {
+        var oldWidth = context.canvas.width;
+        var oldHeight = context.canvas.height;
+
+        context.canvas.width = oldWidth * ratio;
+        context.canvas.height = oldHeight * ratio;
+
+        context.canvas.style.width = oldWidth + 'px';
+        context.canvas.style.height = oldHeight + 'px';
+
+        // now scale the context to counter
+        // the fact that we've manually scaled
+        // our canvas element
+        context.scale(ratio, ratio);
 	}
 
 	this.PolarArea = function(data,options){
