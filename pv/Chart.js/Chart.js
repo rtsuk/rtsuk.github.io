@@ -151,31 +151,35 @@ window.Chart = function(context){
 	var width = context.canvas.width;
 	var height = context.canvas.height;
 
+    if (false) {
+        devicePixelRatio = window.devicePixelRatio || 1;
+        backingStoreRatio = context.webkitBackingStorePixelRatio ||
+                            context.mozBackingStorePixelRatio ||
+                            context.msBackingStorePixelRatio ||
+                            context.oBackingStorePixelRatio ||
+                            context.backingStorePixelRatio || 1;
+        console.log("devicePixelRatio = ", devicePixelRatio)
+        console.log("backingStoreRatio = ", backingStoreRatio)
 
-    devicePixelRatio = window.devicePixelRatio || 1,
-    backingStoreRatio = context.webkitBackingStorePixelRatio ||
-                        context.mozBackingStorePixelRatio ||
-                        context.msBackingStorePixelRatio ||
-                        context.oBackingStorePixelRatio ||
-                        context.backingStorePixelRatio || 1,
+        ratio = devicePixelRatio / backingStoreRatio;
+    	//High pixel density displays - multiply the size of the canvas height/width by the device pixel ratio, then scale.
+    	if (devicePixelRatio !== backingStoreRatio) {
+            var oldWidth = context.canvas.width;
+            var oldHeight = context.canvas.height;
 
-    ratio = devicePixelRatio / backingStoreRatio;
-	//High pixel density displays - multiply the size of the canvas height/width by the device pixel ratio, then scale.
-	if (devicePixelRatio !== backingStoreRatio) {
-        var oldWidth = context.canvas.width;
-        var oldHeight = context.canvas.height;
+            context.canvas.width = oldWidth * ratio;
+            context.canvas.height = oldHeight * ratio;
 
-        context.canvas.width = oldWidth * ratio;
-        context.canvas.height = oldHeight * ratio;
+            context.canvas.style.width = oldWidth + 'px';
+            context.canvas.style.height = oldHeight + 'px';
 
-        context.canvas.style.width = oldWidth + 'px';
-        context.canvas.style.height = oldHeight + 'px';
+            // now scale the context to counter
+            // the fact that we've manually scaled
+            // our canvas element
+            context.scale(ratio, ratio);
+    	}
+    }
 
-        // now scale the context to counter
-        // the fact that we've manually scaled
-        // our canvas element
-        context.scale(ratio, ratio);
-	}
 
 	this.PolarArea = function(data,options){
 	
