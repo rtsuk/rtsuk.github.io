@@ -23,7 +23,7 @@ showChart = () ->
 	myLine = new Chart(document.getElementById("penetrationChart").getContext("2d")).Line(lineChartData, scaleOverride: true, scaleSteps: 10, scaleStepWidth: 10, scaleStartValue: 0);
 
 randomInt = (lower, upper) ->
-  return Math.floor(Math.random() * (upper - lower) + lower)
+  return Math.floor(Math.random() * (upper - lower + 1) + lower)
 
 roll = (sides) ->
 	randomInt(1, sides)
